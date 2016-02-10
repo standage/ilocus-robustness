@@ -3,3 +3,4 @@ Atha/
 genomes/
 scratch/
 *.swp
+*.pyc
