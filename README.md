@@ -25,7 +25,7 @@ The details of this processing is also outside the scope of this analysis, but c
 
 The genome assemblies and annotations needed for this analysis are available from public databases.
 We use GenHub to download the data files, pre-process them into a consistent format, compute iLoci, and extract iLocus sequences.
-Please see [PREREQS.md][PREREQS.md] for technical details on installing GenHub and its dependencies.
+Please see [PREREQS.md](PREREQS.md) for technical details on installing GenHub and its dependencies.
 
 ```bash
 genhub-build.py --workdir=genomes --numprocs=4 \
