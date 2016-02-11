@@ -91,6 +91,7 @@ def main(args):
 
     print('Process vmatch alignments...', file=sys.stderr)
     s_iloci_matched = dict()
+    q_iloci_matched = dict()
     for line in args.vmatch:
         if line.startswith('#'):
             continue
@@ -98,22 +99,24 @@ def main(args):
         m.query = q_iloci[m.query_seqid]
         seqid = m.subject_seqid
         if seqid not in intervals:
-            print(m.query.label, None, sep='\t')
             continue
         overlapping_iloci = intervals[seqid].search(m.substart, m.subend)
         mapped_iloci = m.resolve(overlapping_iloci)
         subject_label = None
         if mapped_iloci is not None:
             for ilocus in mapped_iloci:
-                s_iloci_matched[ilocus.label] = m.query
+                s_iloci_matched[ilocus.label] = True
             subject_label = ','.join([x.label for x in mapped_iloci])
+        q_iloci_matched[m.query.label] = True
         print(m.query.label, subject_label, sep='\t')
 
-    for seqid in intervals:
-        for interval in intervals[seqid]:
-            locus = interval.data
-            if locus.label not in s_iloci_matched:
-                print(None, locus.label, sep='\t')
+    for locusid in q_iloci:
+        if locusid not in q_iloci_matched:
+            print(locusid, None, sep='\t')
+
+    for locusid in s_iloci:
+        if locusid not in s_iloci_matched:
+            print(None, locusid, sep='\t')
 
 
 if __name__ == '__main__':

@@ -95,7 +95,7 @@ vmatch -q Amel/OGS1.0.iloci.fa -complete -e 5b -identity 95 -d -p -showdesc 0 Am
 ## Filtering alignments
 
 Now that we have aligned iLoci from the older assembly to the newer assembly, we need to check how these alignments line up with iLoci in the new assembly.
-MORE DETAIL HERE.
+The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus annotations from both assemblies, and determines which iLoci are mapped to the new assembly and iLocus annotation according to the criteria specified above.
 
 ```bash
 ./ilocus_mapping.py Atha/TAIR6.iloci.gff3 Atha/TAIR10.iloci.gff3 Atha/TAIR10.vmatch.txt \
@@ -103,6 +103,10 @@ MORE DETAIL HERE.
 ./ilocus_mapping.py Amel/OGS1.0.iloci.gff3 Amel/OGS3.2.iloci.gff3 Atha/OGS3.2.vmatch.txt \
     > Amel/OGS3.2.ilocus_map.txt
 ```
+
+## Results
+
+Here.
 
 ## Appendix: motivation
 

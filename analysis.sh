@@ -51,7 +51,7 @@ run_vmatch()
         > ${db}.ilocus_map.txt
 }
 
-#download
+download
 prep
 run_vmatch Atha/TAIR10 Atha/TAIR6 &
 run_vmatch Amel/OGS3.2 Amel/OGS1.0 &
