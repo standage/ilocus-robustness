@@ -1,12 +1,22 @@
 #!/usr/bin/env python
 
 
-from __future__ import print_function
-import sys
 import re
 
 
 class Match(object):
+    """
+    Very minimal class for handling records from vmatch output.
+
+    This class is not an attempt at a robust representation of sequence
+    alignments or robust handling of vmatch output. It is intentionally minimal
+    to support a very limited subset of operations based on very specific
+    assumptions about how vmatch was run.
+
+    Important to note: vmatch reports alignment locations using 0-based
+    indexing. The 0-based start position of each alignment is provided, along
+    with the length of the alignment. The end position is not provided.
+    """
     def __init__(self, line):
         line = line.strip()
         values = re.compile(' +').split(line)
@@ -24,20 +34,13 @@ class Match(object):
         self.query = None
 
     @property
-    def substart(self, fix_notation=True):
-        """
-        Start coordinate of the match on the subject.
-
-        Stored as a 0-based index. Set `fix_notation=True` to change to 1-based
-        index, or set `fix_notation=False` to leave as 0-based.
-        """
-        if fix_notation:
-            return self.subject_pos + 1
-        else:
-            return self.subject_pos
+    def substart(self):
+        """Start coordinate of the match on the subject."""
+        return self.subject_pos
 
     @property
     def subend(self):
+        """End coordinate of the match on the subject."""
         return self.subject_pos + self.subject_length
 
     def resolve(self, intervals):
