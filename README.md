@@ -68,10 +68,10 @@ ln -fsn $(pwd)/genomes/Am32/Am32.iloci.gff3 Amel/OGS3.2.iloci.gff3
 
 So far the goal of this analysis has only been described in vague terms: we want to determine how robust or stable iLoci are from one assembly/annotation version to another.
 Now we need to be more precise about what we mean by *stable*.
-An iLocus *i<sub>A</sub>* from assembly/annotation version *A* is *stable* if it satisfies the following criteria.
-- at least 90% of the iLocus can be aligned to assembly *B*
+An iLocus *i<sub>A</sub>* from assembly/annotation version *A* is __*stable*__ if it satisfies the following criteria.
+- at least 90% of *i<sub>A</sub>* can be aligned to assembly *B*
 - the aligned (sub)sequences have at least 95% identity
-- there exists at least one locus *i<sub>B</sub>* from asssembly/annotation version *B* that has at least 90% reciprocal overlap with *i<sub>A/</sub>*; that is, *i<sub>A</sub>* overlaps with at least 90% of *i<sub>B</sub>*, and *i<sub>B</sub>* overlaps with at least 90% of *i<sub>A</sub>*
+- there exists at least one locus *i<sub>B</sub>* from asssembly/annotation version *B* that has at least 90% reciprocal overlap with *i<sub>A</sub>*; that is, *i<sub>A</sub>* overlaps with at least 90% of *i<sub>B</sub>*, and *i<sub>B</sub>* overlaps with at least 90% of *i<sub>A</sub>*
 
 We use the vmatch software suite to compute the alignments.
 First we must create an index of the genome sequences to facilitate rapid searches.
