@@ -98,10 +98,10 @@ Now that we have aligned iLoci from the older assembly to the newer assembly, we
 The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus annotations from both assemblies, and determines which iLoci are mapped to the new assembly and iLocus annotation according to the criteria specified above.
 
 ```bash
-./ilocus_mapping.py Atha/TAIR6.iloci.gff3 Atha/TAIR10.iloci.gff3 Atha/TAIR10.vmatch.txt \
-    > Atha/TAIR10.ilocus_map.txt
-./ilocus_mapping.py Amel/OGS1.0.iloci.gff3 Amel/OGS3.2.iloci.gff3 Atha/OGS3.2.vmatch.txt \
-    > Amel/OGS3.2.ilocus_map.txt
+./ilocus_mapping.py --outfile=Atha/TAIR10.ilocus_map.txt --logfile=Atha/TAIR10.ilocus_map.log \
+    Atha/TAIR6.iloci.gff3 Atha/TAIR10.iloci.gff3 Atha/TAIR10.vmatch.txt
+./ilocus_mapping.py --outfile=Amel/OGS3.2.ilocus_map.txt --logfile=Amel/OGS3.2.ilocus_map.log \
+    Amel/OGS1.0.iloci.gff3 Amel/OGS3.2.iloci.gff3 Atha/OGS3.2.vmatch.txt
 ```
 
 ## Results
