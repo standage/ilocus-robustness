@@ -43,20 +43,6 @@ class Match(object):
         """End coordinate of the match on the subject."""
         return self.subject_pos + self.subject_length
 
-    def resolve(self, intervals):
-        if intervals is None:
-            return None
-
-        valid_match = list()
-        for interval in intervals:
-            subject = interval.data
-            overlap = (min(self.query.end, subject.end) -
-                       max(self.query.start, subject.start))
-            perc_query = float(overlap) / float(len(self.query))
-            perc_subject = float(overlap) / float(len(subject))
-            if perc_query >= 0.9 and perc_subject >= 0.9:
-                valid_match.append(subject)
-
-        if len(valid_match) == 0:
-            return None
-        return valid_match
+    @property
+    def loc(self):
+        return (self.subject_seqid, self.substart + 1, self.subend)

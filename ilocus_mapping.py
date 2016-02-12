@@ -10,7 +10,7 @@ import feature
 import match
 
 
-def resolve(match, intervals):
+def resolve(match, intervals, logfile=None):
     """
     Compute iLocus mapping.
 
@@ -33,14 +33,22 @@ def resolve(match, intervals):
         subject = interval.data
         overlap = (min(match.query.end, subject.end) -
                    max(match.query.start, subject.start))
-        perc_query = float(overlap) / float(len(self.query))
+        perc_query = float(overlap) / float(len(match.query))
         perc_subject = float(overlap) / float(len(subject))
+        if logfile:
+            qloc = '%s:%d-%d' % match.loc
+            sloc = '%s:%d-%d' % subject.loc
+            message = 'Candidate mapping: '
+            message += 'query=%s[%s] ' % (match.query.label, qloc)
+            message += 'subject=%s[%s] ' % (subject.label, sloc)
+            message += 'qovlp=%.4lf sovlp=%.4lf' % (perc_query, perc_subject)
+            print(message, file=logfile)
         if perc_query >= 0.9 and perc_subject >= 0.9:
             valid_mappings.append(subject)
 
     if len(valid_mappings) == 0:
         return None
-    return valid_match
+    return valid_mappings
 
 
 def parse_iloci(infile):
@@ -60,6 +68,12 @@ def parse_iloci(infile):
 def get_parser():
     """Specify a command-line interface for this script."""
     parser = argparse.ArgumentParser()
+    parser.add_argument('-o', '--outfile', type=argparse.FileType('w'),
+                        default=sys.stdout, metavar='OF',
+                        help='output file; default is terminal (stdout)')
+    parser.add_argument('-l', '--logfile', type=argparse.FileType('w'),
+                        default=None, metavar='LF', help='print verbose '
+                        'diagnostic messages to the specified file')
     parser.add_argument('q_gff3', type=argparse.FileType('r'),
                         help='iLocus annotation for query')
     parser.add_argument('s_gff3', type=argparse.FileType('r'),
@@ -101,22 +115,22 @@ def main(args):
         if seqid not in intervals:
             continue
         overlapping_iloci = intervals[seqid].search(m.substart, m.subend)
-        mapped_iloci = m.resolve(overlapping_iloci)
+        mapped_iloci = resolve(m, overlapping_iloci, args.logfile)
         subject_label = None
         if mapped_iloci is not None:
             for ilocus in mapped_iloci:
                 s_iloci_matched[ilocus.label] = True
             subject_label = ','.join([x.label for x in mapped_iloci])
         q_iloci_matched[m.query.label] = True
-        print(m.query.label, subject_label, sep='\t')
+        print(m.query.label, subject_label, sep='\t', file=args.outfile)
 
     for locusid in q_iloci:
         if locusid not in q_iloci_matched:
-            print(locusid, None, sep='\t')
+            print(locusid, None, sep='\t', file=args.outfile)
 
     for locusid in s_iloci:
         if locusid not in s_iloci_matched:
-            print(None, locusid, sep='\t')
+            print(None, locusid, sep='\t', file=args.outfile)
 
 
 if __name__ == '__main__':

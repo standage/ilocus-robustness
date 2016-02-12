@@ -44,3 +44,7 @@ class Feature(object):
     @property
     def label(self):
         return self.attr('Name')
+
+    @property
+    def loc(self):
+        return (self.seqid, self.start + 1, self.end)
