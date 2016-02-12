@@ -34,15 +34,15 @@ class Match(object):
         self.query = None
 
     @property
-    def substart(self):
+    def start(self):
         """Start coordinate of the match on the subject."""
         return self.subject_pos
 
     @property
-    def subend(self):
+    def end(self):
         """End coordinate of the match on the subject."""
         return self.subject_pos + self.subject_length
 
     @property
     def loc(self):
-        return (self.subject_seqid, self.substart + 1, self.subend)
+        return (self.subject_seqid, self.start + 1, self.end)

@@ -45,10 +45,11 @@ run_vmatch()
     vmatch -q ${query}.iloci.fa -mum -l 400 -d -p -identity 50 -showdesc 0 \
            ${db}.gdna.fa \
         > ${db}.vmatch.txt
-    ./ilocus_mapping.py ${query}.iloci.gff3 \
+    ./ilocus_mapping.py --outfile=${db}.ilocus_map.txt \
+                        --logfile=${db}.ilocus_map.log \
+                        ${query}.iloci.gff3 \
                         ${db}.iloci.gff3 \
-                        ${db}.vmatch.txt \
-        > ${db}.ilocus_map.txt
+                        ${db}.vmatch.txt
 }
 
 download

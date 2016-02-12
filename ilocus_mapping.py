@@ -31,8 +31,8 @@ def resolve(match, intervals, logfile=None):
     for interval in intervals:
         # Here, `subject` is a candidate target of the iLocus query.
         subject = interval.data
-        overlap = (min(match.query.end, subject.end) -
-                   max(match.query.start, subject.start))
+        overlap = (min(match.end, subject.end) -
+                   max(match.start, subject.start))
         perc_query = float(overlap) / float(len(match.query))
         perc_subject = float(overlap) / float(len(subject))
         if logfile:
@@ -114,7 +114,7 @@ def main(args):
         seqid = m.subject_seqid
         if seqid not in intervals:
             continue
-        overlapping_iloci = intervals[seqid].search(m.substart, m.subend)
+        overlapping_iloci = intervals[seqid].search(m.start, m.end)
         mapped_iloci = resolve(m, overlapping_iloci, args.logfile)
         subject_label = None
         if mapped_iloci is not None:
