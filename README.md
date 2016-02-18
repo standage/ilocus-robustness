@@ -87,7 +87,8 @@ The iLoci that satisfy the filtering criteria will be aligned to genome *B*, and
 We will use RepeatMasker to annotate transposable elements and other repetitive DNA in the genome.
 We will then use bedtools to compute the percentage of each iLocus occupied by repeats, and custom scripts to filter out iLoci with repeats occupying at least 25% of their length or 500 bp total.
 
-```
+```bash
+#----- Arabidopsis thaliana -----
 RepeatMasker -species viridiplantae -parallel 16 -frag 1000000 -lcambig \
              -xsmall -gff Atha/TAIR6.gdna.fa \
     > Atha/TAIR6.rm.log 2>&1
@@ -103,6 +104,7 @@ bedtools coverage -a <(grep $'\tlocus\t' Atha/TAIR6.iloci.gff3) \
 ./select_seq.py Atha/TAIR6.iloci.filter-rm.txt Atha/TAIR6.iloci.fa \
     > Atha/TAIR6.iloci.filter-rm.fa
 
+#----- Apis mellifera -----
 RepeatMasker -species insects -parallel 16 -frag 1000000 -lcambig \
              -xsmall -gff Amel/OGS1.0.gdna.fa \
     > Amel/OGS1.0.rm.log 2>&1
