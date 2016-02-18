@@ -38,30 +38,34 @@ genhub-build.py --workdir=genomes --numprocs=4 \
 Assuming everything ran correctly, GenHub created the `genomes/` directory and subdirectories for each assembly/annotation version.
 These subdirectories contain quite a few files, including ancillary files that are irrelevant to this analysis.
 Let's make a clean directory---to isolate the work done in this analysis from the processing done by GenHub---and create links to the files we actually need.
-For both species, we need:
-- iLocus sequences for the older assembly/annotation version
-- whole genome sequences for the new assembly version
-- iLocus annotations for both assembly/annotation versions
+For each annotated genome we need:
+- iLocus annotation
+- iLocus sequences
+- whole genome sequences
 
 ```bash
-mkdir -p Atha/
-mkdir -p Amel/
+mkdir Atha/
+mkdir Amel/
 
-# iLocus sequences (older assembly/annotation version)
-ln -fsn $(pwd)/genomes/Att6/Att6.iloci.fa Atha/TAIR6.iloci.fa
-ln -fsn $(pwd)/genomes/Am10/Am10.iloci.fa Amel/OGS1.0.iloci.fa
+# TAIR6
+ln -s $(pwd)/genomes/Att6/Att6.iloci.gff3 Atha/TAIR6.iloci.gff3
+ln -s $(pwd)/genomes/Att6/Att6.iloci.fa Atha/TAIR6.iloci.fa
+ln -s $(pwd)/genomes/Att6/Att6.gdna.fa Atha/TAIR6.gdna.fa
 
-# Whole genome sequences (newer assembly version)
-ln -fsn $(pwd)/genomes/Atha/Atha.gdna.fa Atha/TAIR10.gdna.fa
-ln -fsn $(pwd)/genomes/Am32/Am32.gdna.fa Amel/OGS3.2.gdna.fa
+# TAIR10
+ln -s $(pwd)/genomes/Atha/Atha.iloci.gff3 Atha/TAIR10.iloci.gff3
+ln -s $(pwd)/genomes/Atha/Atha.iloci.fa Atha/TAIR10.iloci.fa
+ln -s $(pwd)/genomes/Atha/Atha.gdna.fa Atha/TAIR10.gdna.fa
 
-# iLocus annotations (older version)
-ln -fsn $(pwd)/genomes/Att6/Att6.iloci.gff3 Atha/TAIR6.iloci.gff3
-ln -fsn $(pwd)/genomes/Am10/Am10.iloci.gff3 Amel/OGS1.0.iloci.gff3
+# Amel 2.0 / OGS 1.0
+ln -s $(pwd)/genomes/Am10/Am10.iloci.gff3 Amel/OGS1.0.iloci.gff3
+ln -s $(pwd)/genomes/Am10/Am10.iloci.fa Amel/OGS1.0.iloci.fa
+ln -s $(pwd)/genomes/Am10/Am10.gdna.fa Amel/OGS1.0.gdna.fa
 
-# iLocus annotations (newer version)
-ln -fsn $(pwd)/genomes/Atha/Atha.iloci.gff3 Atha/TAIR10.iloci.gff3
-ln -fsn $(pwd)/genomes/Am32/Am32.iloci.gff3 Amel/OGS3.2.iloci.gff3
+# Amel 4.5 / OGS 3.2
+ln -s $(pwd)/genomes/Am32/Am32.iloci.gff3 Amel/OGS3.2.iloci.gff3
+ln -s $(pwd)/genomes/Am32/Am32.iloci.fa Amel/OGS3.2.iloci.fa
+ln -s $(pwd)/genomes/Am32/Am32.gdna.fa Amel/OGS3.2.gdna.fa
 ```
 
 ## iLocus alignment
