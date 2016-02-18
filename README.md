@@ -77,7 +77,51 @@ An iLocus *i<sub>A</sub>* from assembly/annotation version *A* is __*stable*__ i
 - the aligned (sub)sequences have at least 95% identity
 - there exists at least one locus *i<sub>B</sub>* from asssembly/annotation version *B* that has at least 90% reciprocal overlap with *i<sub>A</sub>*; that is, *i<sub>A</sub>* overlaps with at least 90% of *i<sub>B</sub>*, and *i<sub>B</sub>* overlaps with at least 90% of *i<sub>A</sub>*
 
-We use the vmatch software suite to compute the alignments.
+We can use the vmatch software suite to compute the alignments.
+However, since we are computing approximate matches instead of exact matches, highly repetitive sequences have the potential to drastically increase the runtime required to compute the alignments.
+So we will want to annotate repetitive sequences on genome *A* and filter out corresponding iLoci with repetitive content above some threshold.
+The iLoci that satisfy the filtering criteria will be aligned to genome *B*, and the proportion of these iLoci that align (as opposed to all iLoci) will be used to assess iLocus stability.
+
+### Annotation of repeats
+
+We will use RepeatMasker to annotate transposable elements and other repetitive DNA in the genome.
+We will then use bedtools to compute the percentage of each iLocus occupied by repeats, and custom scripts to filter out iLoci with repeats occupying at least 25% of their length or 500 bp total.
+
+```
+RepeatMasker -species viridiplantae -parallel 16 -frag 1000000 -lcambig \
+             -xsmall -gff Atha/TAIR6.gdna.fa \
+    > Atha/TAIR6.rm.log 2>&1
+
+bedtools coverage -a <(grep $'\tlocus\t' Atha/TAIR6.iloci.gff3) \
+                  -b Atha/TAIR6.gdna.fa.out.gff \
+    > Atha/TAIR6.iloci.coverage.tsv
+
+./ilocus_filter.py --perc 0.25 --bp 500 Atha/TAIR6.iloci.coverage.tsv \
+    > Atha/TAIR6.iloci.filter-rm.txt \
+    2> Atha/TAIR6.iloci.filter-rm.discard.txt
+
+./select_seq.py Atha/TAIR6.iloci.filter-rm.txt Atha/TAIR6.iloci.fa \
+    > Atha/TAIR6.iloci.filter-rm.fa
+
+RepeatMasker -species insects -parallel 16 -frag 1000000 -lcambig \
+             -xsmall -gff Amel/OGS1.0.gdna.fa \
+    > Amel/OGS1.0.rm.log 2>&1
+
+bedtools coverage -a <(grep $'\tlocus\t' Amel/OGS1.0.iloci.gff3) \
+                  -b Amel/OGS1.0.gdna.fa.out.gff \
+    > Amel/OGS1.0.iloci.coverage.tsv
+
+./ilocus_filter.py --perc 0.25 --bp 500 Amel/OGS1.0.iloci.coverage.tsv \
+    > Amel/OGS1.0.iloci.filter-rm.txt \
+    2> Amel/OGS1.0.iloci.filter-rm.discard.txt
+
+./select_seq.py Amel/OGS1.0.iloci.filter-rm.txt Amel/OGS1.0.iloci.fa \
+    > Amel/OGS1.0.iloci.filter-rm.fa
+```
+
+### Computing alignments
+
+Having selected iLoci that match our filtering criteria, we are ready to compute the alignments.
 First we must create an index of the genome sequences to facilitate rapid searches.
 
 ```bash
@@ -90,16 +134,16 @@ With the `vmatch` command, we can only enforce the `95%` identity criterion.
 The other criteria regarding receiprocal overlap will have to be handled with post-processing.
 
 ```bash
-vmatch -q Atha/TAIR6.iloci.fa -complete -e 5b -identity 95 -d -p -showdesc 0 Atha/TAIR10.gdna.fa \
+vmatch -q Atha/TAIR6.iloci.filter-rm.fa -complete -e 5b -identity 95 -d -p -showdesc 0 Atha/TAIR10.gdna.fa \
     > Atha/TAIR10.vmatch.txt
-vmatch -q Amel/OGS1.0.iloci.fa -complete -e 5b -identity 95 -d -p -showdesc 0 Amel/OGS3.2.gdna.fa \
+vmatch -q Amel/OGS1.0.iloci.filter-rm.fa -complete -e 5b -identity 95 -d -p -showdesc 0 Amel/OGS3.2.gdna.fa \
     > Amel/OGS3.2.vmatch.txt
 ```
 
-## Filtering alignments
+### Filtering alignments
 
-Now that we have aligned iLoci from the older assembly to the newer assembly, we need to check how these alignments line up with iLoci in the new assembly.
-The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus annotations from both assemblies, and determines which iLoci are mapped to the new assembly and iLocus annotation according to the criteria specified above.
+Now that we have filtered iLoci based on repeat content, aligned those iLoci from assembly *A* to assembly *B*, we need to check how these alignments line up with iLoci in the new assembly.
+The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus annotations from both assemblies, and determines which iLoci are mapped to the new assembly and iLocus annotation according to the overlap criteria specified above.
 
 ```bash
 ./ilocus_mapping.py --outfile=Atha/TAIR10.ilocus_map.txt --logfile=Atha/TAIR10.ilocus_map.log \
@@ -110,7 +154,18 @@ The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus an
 
 ## Results
 
-Here.
+### *Arabidopsis thaliana*
+
+```
+===== iLocus stability report (A=Atha/TAIR6, B=Atha/TAIR10) =====
+    - total iLoci from A: 37299
+    - filtered iLoci:     33730
+    - stable iLoci:       28890 / 33730 =  0.8565076
+```
+
+### *Apis mellifera*
+
+Waiting.
 
 ## Appendix: motivation
 
