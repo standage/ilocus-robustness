@@ -4,6 +4,7 @@
 from __future__ import print_function
 import argparse
 import intervaltree
+import itertools
 import sys
 
 import feature
@@ -78,8 +79,8 @@ def get_parser():
                         help='iLocus annotation for query')
     parser.add_argument('s_gff3', type=argparse.FileType('r'),
                         help='iLocus annotation for subject')
-    parser.add_argument('vmatch', type=argparse.FileType('r'),
-                        help='vmatch output file')
+    parser.add_argument('vmatch', type=argparse.FileType('r'), nargs='+',
+                        help='vmatch output file(s)')
     return parser
 
 
@@ -106,7 +107,7 @@ def main(args):
     print('Process vmatch alignments...', file=sys.stderr)
     s_iloci_matched = dict()
     q_iloci_matched = dict()
-    for line in args.vmatch:
+    for line in itertools.chain(*args.vmatch):
         if line.startswith('#'):
             continue
         m = match.Match(line)
