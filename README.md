@@ -167,7 +167,12 @@ The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus an
 
 ### *Apis mellifera*
 
-Waiting.
+```
+===== iLocus stability report (A=Amel/OGS1.0, B=Amel/OGS3.2) =====
+    - total iLoci from A: 22784
+    - filtered iLoci:     19447
+    - stable iLoci:       5519 / 19447 =  0.283797
+```
 
 ## Appendix: motivation
 
