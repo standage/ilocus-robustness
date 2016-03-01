@@ -162,6 +162,7 @@ The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus an
 ===== iLocus stability report (A=Atha/TAIR6, B=Atha/TAIR10) =====
     - total iLoci from A: 37299
     - filtered iLoci:     33730
+    - aligned iLoci:      33717 / 33730 =  0.9996146
     - stable iLoci:       28890 / 33730 =  0.8565076
 
 ===== Breakdown: stable iLoci =====
@@ -185,6 +186,7 @@ ciLocus: 5
 ===== iLocus stability report (A=Amel/OGS1.0, B=Amel/OGS3.2) =====
     - total iLoci from A: 22784
     - filtered iLoci:     19447
+    - aligned iLoci:      18010 / 19447 =  0.9261069
     - stable iLoci:       5519 / 19447 =  0.283797
 
 ===== Breakdown: stable iLoci =====
