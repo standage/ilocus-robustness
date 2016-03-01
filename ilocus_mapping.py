@@ -9,6 +9,7 @@ import sys
 
 import feature
 import match
+import mapping
 
 
 def resolve(match, intervals, logfile=None):
@@ -107,6 +108,7 @@ def main(args):
     print('Process vmatch alignments...', file=sys.stderr)
     s_iloci_matched = dict()
     q_iloci_matched = dict()
+    locusmapping = mapping.Mapping()
     for line in itertools.chain(*args.vmatch):
         if line.startswith('#'):
             continue
@@ -117,13 +119,11 @@ def main(args):
             continue
         overlapping_iloci = intervals[seqid].search(m.start, m.end)
         mapped_iloci = resolve(m, overlapping_iloci, args.logfile)
-        subject_label = None
-        if mapped_iloci is not None:
-            for ilocus in mapped_iloci:
-                s_iloci_matched[ilocus.label] = True
-            subject_label = ','.join([x.label for x in mapped_iloci])
+        locusmapping.add(m.query.label, mapped_iloci)
         q_iloci_matched[m.query.label] = True
-        print(m.query.label, subject_label, sep='\t', file=args.outfile)
+
+    for locusid, mappedloci in locusmapping:
+        print(locusid, mappedloci, sep='\t', file=args.outfile)
 
     for locusid in q_iloci:
         if locusid not in q_iloci_matched:

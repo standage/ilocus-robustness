@@ -87,14 +87,17 @@ summary()
 
      # Compute proportion of stable iLoci
      ilocus_count_txt=$(wc -l < ${query}.iloci.filter-rm.txt)
+     ilocus_count_algn=$(cat ${db}.vmatch.*.txt | grep -v '^#' | awk '{ print $6 }' | sort -u | wc -l)
      ilocus_count_map=$(grep -v $'^None\t' ${db}.ilocus_map.txt | cut -f 1 | sort -u | wc -l)
      ilocus_count_stable=$(grep -v None ${db}.ilocus_map.txt | cut -f 1 | sort -u | wc -l)
-     frac="$ilocus_count_stable / $ilocus_count_txt"
+     fracaligned="$ilocus_count_algn / $ilocus_count_txt"
+     fracstable="$ilocus_count_stable / $ilocus_count_txt"
      echo ""
      echo "===== iLocus stability report (A=$query, B=$db) ====="
      echo "    - total iLoci from A: $ilocus_count_map"
      echo "    - filtered iLoci:     $ilocus_count_txt"
-     echo "    - stable iLoci:       $frac = " $(Rscript -e "$frac" | cut -c 5-)
+     echo "    - aligned iLoci:      $fracaligned = " $(Rscript -e "$fracaligned" | cut -c 5-)
+     echo "    - stable iLoci:       $fracstable = " $(Rscript -e "$fracstable" | cut -c 5-)
 }
 
 

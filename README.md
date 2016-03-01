@@ -163,6 +163,20 @@ The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus an
     - total iLoci from A: 37299
     - filtered iLoci:     33730
     - stable iLoci:       28890 / 33730 =  0.8565076
+
+===== Breakdown: stable iLoci =====
+fiLocus: 4
+niLocus: 730
+piLocus: 22749
+iiLocus: 5395
+ciLocus: 12
+
+===== Breakdown: non-stable iLoci =====
+niLocus: 39
+fiLocus: 5
+piLocus: 3758
+iiLocus: 4602
+ciLocus: 5
 ```
 
 ### *Apis mellifera*
@@ -172,6 +186,18 @@ The `ilocus_mapping.py` script reads the vmatch output, along with the iLocus an
     - total iLoci from A: 22784
     - filtered iLoci:     19447
     - stable iLoci:       5519 / 19447 =  0.283797
+
+===== Breakdown: stable iLoci =====
+fiLocus: 2247
+piLocus: 2697
+iiLocus: 567
+ciLocus: 8
+
+===== Breakdown: non-stable iLoci =====
+fiLocus: 5743
+piLocus: 7201
+iiLocus: 4223
+ciLocus: 98
 ```
 
 ## Appendix: motivation
