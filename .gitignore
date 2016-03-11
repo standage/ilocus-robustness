@@ -4,3 +4,4 @@ genomes/
 scratch/
 *.swp
 *.pyc
+.ipynb_checkpoints/
