@@ -123,7 +123,15 @@ def main(args):
         q_iloci_matched[m.query.label] = True
 
     for locusid, mappedloci in locusmapping:
-        print(locusid, mappedloci, sep='\t', file=args.outfile)
+        qtype = q_iloci[locusid].attr('iLocus_type')
+        locus = '{}:{}'.format(locusid, qtype)
+        mtypes = None
+        mapped = None
+        if mappedloci:
+            mtypes = [s_iloci[x].attr('iLocus_type') for x in mappedloci]
+            mapped = ['{}:{}'.format(x, y) for x, y in zip(mappedloci, mtypes)]
+            mapped = ','.join(mapped)
+        print(locus, mapped, sep='\t', file=args.outfile)
 
     for locusid in q_iloci:
         if locusid not in q_iloci_matched:

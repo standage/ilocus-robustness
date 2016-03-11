@@ -19,5 +19,5 @@ class Mapping(object):
             if len(self.mapping[locusid]) == 0:
                 yield locusid, None
                 continue
-            yield locusid, ','.join([x.label for x in self.mapping[locusid]])
+            yield locusid, [x.label for x in self.mapping[locusid]]
 
